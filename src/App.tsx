@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, MouseEvent } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { 
   Tv, 
   Search, 
@@ -15,13 +15,7 @@ import {
   Menu,
   ChevronRight,
   MonitorPlay,
-  Heart,
-  History,
-  Share2,
-  Lock,
-  Unlock,
-  List,
-  CheckCircle2
+  Heart
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { CHANNELS, Channel } from './channels';
@@ -36,59 +30,35 @@ const CATEGORIES = [
   { id: 'Documentários', name: 'Documentos', icon: Compass },
   { id: 'Variedades', name: 'Variedades', icon: Gamepad2 },
   { id: 'Reality', name: 'Reality', icon: MonitorPlay },
-  { id: '24 Horas', name: '24 Horas', icon: History },
-  { id: 'Adulto', name: 'Adulto', icon: Lock },
 ];
 
 export default function App() {
   const [selectedChannel, setSelectedChannel] = useState<Channel | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('all');
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [showAdult, setShowAdult] = useState(false);
-  const [showAdultPrompt, setShowAdultPrompt] = useState(false);
-  const [adultPassword, setAdultPassword] = useState('');
-  const [showShareToast, setShowShareToast] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  
   const [favorites, setFavorites] = useState<number[]>(() => {
     const saved = localStorage.getItem('nexus-favorites');
     return saved ? JSON.parse(saved) : [];
   });
-
-  const [history, setHistory] = useState<number[]>(() => {
-    const saved = localStorage.getItem('nexus-history');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     localStorage.setItem('nexus-favorites', JSON.stringify(favorites));
   }, [favorites]);
 
-  useEffect(() => {
-    localStorage.setItem('nexus-history', JSON.stringify(history));
-  }, [history]);
-
   const filteredChannels = useMemo(() => {
     return CHANNELS.filter(channel => {
       const matchesSearch = channel.name.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesCategory = activeCategory === 'all' || channel.category === activeCategory;
-      const isAdult = channel.category === 'Adulto';
-      
-      if (isAdult && !showAdult) return false;
       return matchesSearch && matchesCategory;
     });
-  }, [searchQuery, activeCategory, showAdult]);
+  }, [searchQuery, activeCategory]);
 
   const favoriteChannels = useMemo(() => {
     return CHANNELS.filter(c => favorites.includes(c.id));
   }, [favorites]);
 
-  const historyChannels = useMemo(() => {
-    return history.map(id => CHANNELS.find(c => c.id === id)).filter(Boolean) as Channel[];
-  }, [history]);
-
-  const toggleFavorite = (id: number, e: MouseEvent) => {
+  const toggleFavorite = (id: number, e: React.MouseEvent) => {
     e.stopPropagation();
     setFavorites(prev => 
       prev.includes(id) ? prev.filter(fid => fid !== id) : [...prev, id]
@@ -97,63 +67,11 @@ export default function App() {
 
   const handleWatch = (channel: Channel) => {
     setSelectedChannel(channel);
-    setHistory(prev => {
-      const filtered = prev.filter(id => id !== channel.id);
-      return [channel.id, ...filtered].slice(0, 10);
-    });
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handleShare = (channel: Channel, e: MouseEvent) => {
-    e.stopPropagation();
-    const url = `${window.location.origin}?channel=${channel.slug}`;
-    navigator.clipboard.writeText(url);
-    setShowShareToast(true);
-    setTimeout(() => setShowShareToast(false), 3000);
-  };
-
-  const handleAdultToggle = () => {
-    if (showAdult) {
-      setShowAdult(false);
-    } else {
-      setShowAdultPrompt(true);
-    }
-  };
-
-  const confirmAdultMode = () => {
-    if (adultPassword === '1818') {
-      setShowAdult(true);
-      setShowAdultPrompt(false);
-      setAdultPassword('');
-    } else {
-      alert('Senha incorreta!');
-    }
-  };
-
-  const getPlayerUrl = (channel: Channel) => {
-    if (channel.source === 'embedtv') {
-      return `https://embedtv.best/tv/${channel.slug}`;
-    }
-    return `https://embedflix.click/tv/player.php?canal=${channel.slug}`;
   };
 
   return (
     <div className="min-h-screen bg-[#020617] text-slate-200 font-sans selection:bg-cyan-500/30">
-      {/* Share Toast */}
-      <AnimatePresence>
-        {showShareToast && (
-          <motion.div 
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 50 }}
-            className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] bg-cyan-500 text-white px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3 font-bold"
-          >
-            <CheckCircle2 className="w-5 h-5" />
-            Link copiado para a área de transferência!
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       {/* Top Navigation */}
       <header className="sticky top-0 z-50 glass-panel border-b border-white/5 px-4 py-3 md:px-8">
         <div className="max-w-[1600px] mx-auto flex items-center justify-between gap-4">
@@ -191,12 +109,9 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-3">
-            <button 
-              onClick={handleAdultToggle}
-              className={`hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${showAdult ? 'bg-red-500/10 text-red-400 border border-red-500/20' : 'bg-white/5 text-slate-400 hover:bg-white/10'}`}
-            >
-              {showAdult ? <Unlock className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
-              {showAdult ? 'Modo Adulto ON' : 'Modo Adulto'}
+            <button className="hidden sm:flex items-center gap-2 bg-white/5 hover:bg-white/10 px-4 py-2 rounded-xl text-sm font-semibold transition-all">
+              <TrendingUp className="w-4 h-4 text-cyan-400" />
+              Em Alta
             </button>
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 p-[2px]">
               <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center overflow-hidden">
@@ -219,27 +134,24 @@ export default function App() {
             <div>
               <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4 px-2">Categorias</p>
               <nav className="space-y-1">
-                {CATEGORIES.map((cat) => {
-                  if (cat.id === 'Adulto' && !showAdult) return null;
-                  return (
-                    <button
-                      key={cat.id}
-                      onClick={() => {
-                        setActiveCategory(cat.id);
-                        setIsSidebarOpen(false);
-                      }}
-                      className={`
-                        w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
-                        ${activeCategory === cat.id 
-                          ? 'bg-cyan-500/10 text-cyan-400' 
-                          : 'text-slate-400 hover:bg-white/5 hover:text-slate-200'}
-                      `}
-                    >
-                      <cat.icon className={`w-4 h-4 ${activeCategory === cat.id ? 'text-cyan-400' : 'text-slate-500'}`} />
-                      {cat.name}
-                    </button>
-                  );
-                })}
+                {CATEGORIES.map((cat) => (
+                  <button
+                    key={cat.id}
+                    onClick={() => {
+                      setActiveCategory(cat.id);
+                      setIsSidebarOpen(false);
+                    }}
+                    className={`
+                      w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all
+                      ${activeCategory === cat.id 
+                        ? 'bg-cyan-500/10 text-cyan-400' 
+                        : 'text-slate-400 hover:bg-white/5 hover:text-slate-200'}
+                    `}
+                  >
+                    <cat.icon className={`w-4 h-4 ${activeCategory === cat.id ? 'text-cyan-400' : 'text-slate-500'}`} />
+                    {cat.name}
+                  </button>
+                ))}
               </nav>
             </div>
 
@@ -255,24 +167,6 @@ export default function App() {
                     >
                       <span className="truncate">{channel.name}</span>
                       <ChevronRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {historyChannels.length > 0 && (
-              <div>
-                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4 px-2">Recentes</p>
-                <div className="space-y-1">
-                  {historyChannels.map(channel => (
-                    <button
-                      key={channel.id}
-                      onClick={() => handleWatch(channel)}
-                      className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs text-slate-500 hover:bg-white/5 hover:text-slate-300 transition-all"
-                    >
-                      <History className="w-3 h-3" />
-                      <span className="truncate">{channel.name}</span>
                     </button>
                   ))}
                 </div>
@@ -311,13 +205,6 @@ export default function App() {
                   </div>
                   <div className="flex items-center gap-2">
                     <button 
-                      onClick={(e) => handleShare(selectedChannel, e)}
-                      className="p-3 bg-white/5 text-slate-400 hover:bg-white/10 rounded-xl transition-all"
-                      title="Compartilhar"
-                    >
-                      <Share2 className="w-5 h-5" />
-                    </button>
-                    <button 
                       onClick={(e) => toggleFavorite(selectedChannel.id, e)}
                       className={`p-3 rounded-xl transition-all ${favorites.includes(selectedChannel.id) ? 'bg-cyan-500/10 text-cyan-400' : 'bg-white/5 text-slate-400 hover:bg-white/10'}`}
                     >
@@ -333,7 +220,7 @@ export default function App() {
                 </div>
                 <div className="relative aspect-video w-full bg-black rounded-[2rem] overflow-hidden shadow-2xl shadow-cyan-500/10 border border-white/5">
                   <iframe
-                    src={getPlayerUrl(selectedChannel)}
+                    src={`https://embedflix.click/tv/player.php?id=${selectedChannel.slug}`}
                     className="w-full h-full"
                     frameBorder="0"
                     allowFullScreen
@@ -388,108 +275,58 @@ export default function App() {
               </div>
               
               <div className="flex items-center gap-2 bg-slate-900/50 p-1 rounded-xl border border-white/5">
-                <button 
-                  onClick={() => setViewMode('grid')}
-                  className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${viewMode === 'grid' ? 'bg-cyan-500 text-white shadow-lg shadow-cyan-500/20' : 'text-slate-500 hover:text-slate-300'}`}
-                >
-                  <LayoutGrid className="w-4 h-4" />
-                </button>
-                <button 
-                  onClick={() => setViewMode('list')}
-                  className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all ${viewMode === 'list' ? 'bg-cyan-500 text-white shadow-lg shadow-cyan-500/20' : 'text-slate-500 hover:text-slate-300'}`}
-                >
-                  <List className="w-4 h-4" />
-                </button>
+                <button className="px-4 py-1.5 rounded-lg text-xs font-bold bg-cyan-500 text-white shadow-lg shadow-cyan-500/20">Grid</button>
+                <button className="px-4 py-1.5 rounded-lg text-xs font-bold text-slate-500 hover:text-slate-300">Lista</button>
               </div>
             </div>
 
-            <div className={viewMode === 'grid' 
-              ? "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 md:gap-6"
-              : "flex flex-col gap-3"
-            }>
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 md:gap-6">
               {filteredChannels.map((channel) => (
                 <motion.div
                   key={channel.id}
                   layout
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  whileHover={viewMode === 'grid' ? { y: -8 } : { x: 5 }}
-                  className={`group relative bg-slate-900/40 rounded-3xl border border-white/5 overflow-hidden hover:border-cyan-500/30 transition-all duration-500 ${viewMode === 'list' ? 'p-4 flex items-center justify-between' : 'p-5'}`}
-                  onClick={() => handleWatch(channel)}
+                  whileHover={{ y: -8 }}
+                  className="group relative bg-slate-900/40 rounded-3xl border border-white/5 overflow-hidden hover:border-cyan-500/30 transition-all duration-500"
                 >
-                  {viewMode === 'grid' ? (
-                    <>
-                      <div className="flex items-start justify-between mb-6">
-                        <div className="w-14 h-14 bg-slate-950 rounded-2xl flex items-center justify-center group-hover:bg-cyan-500/10 transition-all duration-500">
-                          <Tv className="w-7 h-7 text-slate-600 group-hover:text-cyan-400 transition-colors" />
-                        </div>
-                        <div className="flex flex-col items-end gap-2">
-                          <div className="flex gap-1">
-                            <button 
-                              onClick={(e) => handleShare(channel, e)}
-                              className="p-2 rounded-lg text-slate-600 hover:text-cyan-400 hover:bg-white/5 transition-all"
-                            >
-                              <Share2 className="w-4 h-4" />
-                            </button>
-                            <button 
-                              onClick={(e) => toggleFavorite(channel.id, e)}
-                              className={`p-2 rounded-lg transition-all ${favorites.includes(channel.id) ? 'text-cyan-400 bg-cyan-500/10' : 'text-slate-600 hover:text-cyan-400 hover:bg-white/5'}`}
-                            >
-                              <Heart className={`w-5 h-5 ${favorites.includes(channel.id) ? 'fill-current' : ''}`} />
-                            </button>
-                          </div>
-                          <span className="text-[9px] font-black uppercase tracking-widest text-slate-600 bg-black/40 px-2 py-1 rounded-md">
-                            {channel.source === 'embedtv' ? 'ULTRA HD' : '4K HDR'}
-                          </span>
-                        </div>
+                  <div className="p-5">
+                    <div className="flex items-start justify-between mb-6">
+                      <div className="w-14 h-14 bg-slate-950 rounded-2xl flex items-center justify-center group-hover:bg-cyan-500/10 transition-all duration-500">
+                        <Tv className="w-7 h-7 text-slate-600 group-hover:text-cyan-400 transition-colors" />
                       </div>
-                      
-                      <div className="mb-6">
-                        <h3 className="text-lg font-bold text-white group-hover:text-cyan-400 transition-colors truncate">
-                          {channel.name}
-                        </h3>
-                        <div className="flex items-center gap-2 mt-1">
-                          <span className="text-[10px] font-bold text-slate-500 uppercase">{channel.category}</span>
-                          <span className="w-1 h-1 bg-slate-700 rounded-full"></span>
-                          <span className="text-[10px] font-bold text-cyan-500/70 uppercase">Online</span>
-                        </div>
-                      </div>
-
-                      <button
-                        className="w-full bg-slate-950 hover:neon-bg text-slate-300 hover:text-white py-3.5 rounded-2xl text-xs font-black tracking-widest flex items-center justify-center gap-2 transition-all duration-300 active:scale-95"
-                      >
-                        <MonitorPlay className="w-4 h-4" />
-                        ASSISTIR AGORA
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 bg-slate-950 rounded-xl flex items-center justify-center">
-                          <Tv className="w-5 h-5 text-slate-600 group-hover:text-cyan-400 transition-colors" />
-                        </div>
-                        <div>
-                          <h3 className="text-sm font-bold text-white group-hover:text-cyan-400 transition-colors">{channel.name}</h3>
-                          <p className="text-[10px] text-slate-500 uppercase font-bold">{channel.category}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <button 
-                          onClick={(e) => handleShare(channel, e)}
-                          className="p-2 text-slate-600 hover:text-cyan-400 transition-all"
-                        >
-                          <Share2 className="w-4 h-4" />
-                        </button>
+                      <div className="flex flex-col items-end gap-2">
                         <button 
                           onClick={(e) => toggleFavorite(channel.id, e)}
-                          className={`p-2 transition-all ${favorites.includes(channel.id) ? 'text-cyan-400' : 'text-slate-600 hover:text-cyan-400'}`}
+                          className={`p-2 rounded-lg transition-all ${favorites.includes(channel.id) ? 'text-cyan-400 bg-cyan-500/10' : 'text-slate-600 hover:text-cyan-400 hover:bg-white/5'}`}
                         >
-                          <Heart className={`w-4 h-4 ${favorites.includes(channel.id) ? 'fill-current' : ''}`} />
+                          <Heart className={`w-5 h-5 ${favorites.includes(channel.id) ? 'fill-current' : ''}`} />
                         </button>
-                        <MonitorPlay className="w-5 h-5 text-slate-700 group-hover:text-cyan-400 transition-colors" />
+                        <span className="text-[9px] font-black uppercase tracking-widest text-slate-600 bg-black/40 px-2 py-1 rounded-md">
+                          4K HDR
+                        </span>
                       </div>
-                    </>
-                  )}
+                    </div>
+                    
+                    <div className="mb-6">
+                      <h3 className="text-lg font-bold text-white group-hover:text-cyan-400 transition-colors truncate">
+                        {channel.name}
+                      </h3>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-[10px] font-bold text-slate-500 uppercase">{channel.category}</span>
+                        <span className="w-1 h-1 bg-slate-700 rounded-full"></span>
+                        <span className="text-[10px] font-bold text-cyan-500/70 uppercase">Online</span>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => handleWatch(channel)}
+                      className="w-full bg-slate-950 hover:neon-bg text-slate-300 hover:text-white py-3.5 rounded-2xl text-xs font-black tracking-widest flex items-center justify-center gap-2 transition-all duration-300 active:scale-95"
+                    >
+                      <MonitorPlay className="w-4 h-4" />
+                      ASSISTIR AGORA
+                    </button>
+                  </div>
                   
                   {/* Decorative element */}
                   <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500/0 to-transparent group-hover:via-cyan-500/50 transition-all duration-500"></div>
@@ -516,72 +353,12 @@ export default function App() {
         </main>
       </div>
 
-      {/* Mobile Search Overlay */}
-      <div className="lg:hidden fixed bottom-6 right-6 z-50 flex flex-col gap-3">
-        <button 
-          onClick={handleAdultToggle}
-          className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-2xl transition-all ${showAdult ? 'bg-red-500 text-white' : 'bg-slate-800 text-slate-400'}`}
-        >
-          {showAdult ? <Unlock className="w-6 h-6" /> : <Lock className="w-6 h-6" />}
-        </button>
+      {/* Mobile Search Overlay (Optional but good for UX) */}
+      <div className="lg:hidden fixed bottom-6 right-6 z-50">
         <button className="w-14 h-14 neon-bg rounded-2xl flex items-center justify-center text-white shadow-2xl shadow-cyan-500/40">
           <Search className="w-6 h-6" />
         </button>
       </div>
-
-      {/* Adult Mode Prompt */}
-      <AnimatePresence>
-        {showAdultPrompt && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm"
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              className="bg-[#0a0d14] border border-white/10 p-8 rounded-3xl max-w-md w-full shadow-2xl"
-            >
-              <div className="w-16 h-16 bg-red-500/10 rounded-2xl flex items-center justify-center mb-6 mx-auto border border-red-500/20">
-                <Lock className="w-8 h-8 text-red-500" />
-              </div>
-              <h3 className="text-2xl font-bold text-center mb-2">Conteúdo Restrito</h3>
-              <p className="text-white/40 text-center text-sm mb-8">
-                Insira a senha de acesso para desbloquear a categoria adulto.
-              </p>
-              
-              <div className="space-y-4">
-                <input
-                  type="password"
-                  placeholder="Senha de Acesso"
-                  value={adultPassword}
-                  onChange={(e) => setAdultPassword(e.target.value)}
-                  className="w-full bg-slate-950 border border-white/10 rounded-2xl py-4 px-6 focus:outline-none focus:ring-2 focus:ring-red-500/50"
-                  onKeyDown={(e) => e.key === 'Enter' && confirmAdultMode()}
-                />
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => setShowAdultPrompt(false)}
-                    className="flex-1 py-4 bg-white/5 hover:bg-white/10 font-bold rounded-2xl transition-all"
-                  >
-                    CANCELAR
-                  </button>
-                  <button
-                    onClick={confirmAdultMode}
-                    className="flex-1 py-4 bg-red-500 hover:bg-red-400 text-white font-bold rounded-2xl transition-all shadow-lg shadow-red-500/20"
-                  >
-                    CONFIRMAR
-                  </button>
-                </div>
-                <p className="text-[10px] text-center text-white/20 mt-4">
-                  Dica: A senha padrão é <span className="text-white/40">1818</span>
-                </p>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Footer */}
       <footer className="border-t border-white/5 py-16 px-4 md:px-8 bg-slate-950/50 mt-20">
