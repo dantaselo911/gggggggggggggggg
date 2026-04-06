@@ -253,115 +253,190 @@ const AdminDashboard = ({ profile }: { profile: UserProfile }) => {
       showToast("Erro ao remover canal", "error");
     }
   };
-
   const seedChannels = async () => {
     const sampleChannels = [
-      // Aberto
-      { name: 'Globo SP', category: 'Aberto', url: 'globo-sp', logo: 'https://logodownload.org/wp-content/uploads/2014/02/globo-logo.png', isPremium: false },
-      { name: 'Globo RJ', category: 'Aberto', url: 'globo-rj', logo: 'https://logodownload.org/wp-content/uploads/2014/02/globo-logo.png', isPremium: false },
-      { name: 'Globo MG', category: 'Aberto', url: 'globo-mg', logo: 'https://logodownload.org/wp-content/uploads/2014/02/globo-logo.png', isPremium: false },
-      { name: 'SBT', category: 'Aberto', url: 'sbt', logo: 'https://logodownload.org/wp-content/uploads/2014/04/sbt-logo.png', isPremium: false },
-      { name: 'Record TV', category: 'Aberto', url: 'record-tv', logo: 'https://logodownload.org/wp-content/uploads/2014/05/record-tv-logo.png', isPremium: false },
-      { name: 'Band', category: 'Aberto', url: 'band', logo: 'https://logodownload.org/wp-content/uploads/2014/05/band-logo.png', isPremium: false },
-      { name: 'Rede TV', category: 'Aberto', url: 'rede-tv', logo: 'https://logodownload.org/wp-content/uploads/2014/05/redetv-logo.png', isPremium: false },
-      { name: 'Cultura', category: 'Aberto', url: 'cultura', logo: 'https://logodownload.org/wp-content/uploads/2014/05/tv-cultura-logo.png', isPremium: false },
-      
-      // Esportes
-      { name: 'SporTV', category: 'Esportes', url: 'sportv', logo: 'https://logodownload.org/wp-content/uploads/2014/05/sportv-logo.png', isPremium: true },
-      { name: 'SporTV 2', category: 'Esportes', url: 'sportv-2', logo: 'https://logodownload.org/wp-content/uploads/2014/05/sportv-logo.png', isPremium: true },
-      { name: 'SporTV 3', category: 'Esportes', url: 'sportv-3', logo: 'https://logodownload.org/wp-content/uploads/2014/05/sportv-logo.png', isPremium: true },
-      { name: 'ESPN', category: 'Esportes', url: 'espn', logo: 'https://logodownload.org/wp-content/uploads/2014/05/espn-logo.png', isPremium: true },
-      { name: 'ESPN 2', category: 'Esportes', url: 'espn-2', logo: 'https://logodownload.org/wp-content/uploads/2014/05/espn-logo.png', isPremium: true },
-      { name: 'ESPN 3', category: 'Esportes', url: 'espn-3', logo: 'https://logodownload.org/wp-content/uploads/2014/05/espn-logo.png', isPremium: true },
-      { name: 'ESPN 4', category: 'Esportes', url: 'espn-4', logo: 'https://logodownload.org/wp-content/uploads/2014/05/espn-logo.png', isPremium: true },
-      { name: 'Fox Sports', category: 'Esportes', url: 'fox-sports', logo: 'https://logodownload.org/wp-content/uploads/2014/10/fox-sports-logo.png', isPremium: true },
-      { name: 'Fox Sports 2', category: 'Esportes', url: 'fox-sports-2', logo: 'https://logodownload.org/wp-content/uploads/2014/10/fox-sports-logo.png', isPremium: true },
-      { name: 'Premiere', category: 'Esportes', url: 'premiere', logo: 'https://logodownload.org/wp-content/uploads/2014/10/premiere-logo.png', isPremium: true },
-      { name: 'Premiere 2', category: 'Esportes', url: 'premiere-2', logo: 'https://logodownload.org/wp-content/uploads/2014/10/premiere-logo.png', isPremium: true },
-      { name: 'Premiere 3', category: 'Esportes', url: 'premiere-3', logo: 'https://logodownload.org/wp-content/uploads/2014/10/premiere-logo.png', isPremium: true },
-      { name: 'Premiere 4', category: 'Esportes', url: 'premiere-4', logo: 'https://logodownload.org/wp-content/uploads/2014/10/premiere-logo.png', isPremium: true },
-      { name: 'Premiere 5', category: 'Esportes', url: 'premiere-5', logo: 'https://logodownload.org/wp-content/uploads/2014/10/premiere-logo.png', isPremium: true },
-      { name: 'Premiere 6', category: 'Esportes', url: 'premiere-6', logo: 'https://logodownload.org/wp-content/uploads/2014/10/premiere-logo.png', isPremium: true },
-      { name: 'Premiere 7', category: 'Esportes', url: 'premiere-7', logo: 'https://logodownload.org/wp-content/uploads/2014/10/premiere-logo.png', isPremium: true },
-      { name: 'Band Sports', category: 'Esportes', url: 'band-sports', logo: 'https://logodownload.org/wp-content/uploads/2014/05/bandsports-logo.png', isPremium: true },
-      { name: 'Combate', category: 'Esportes', url: 'combate', logo: 'https://logodownload.org/wp-content/uploads/2014/10/combate-logo.png', isPremium: true },
-      { name: 'EI Plus', category: 'Esportes', url: 'ei-plus', logo: 'https://logodownload.org/wp-content/uploads/2014/10/esporte-interativo-logo.png', isPremium: true },
-      { name: 'UFC Fight Pass', category: 'Esportes', url: 'ufc-fight-pass', logo: 'https://logodownload.org/wp-content/uploads/2014/10/ufc-logo.png', isPremium: true },
-      { name: 'Caze TV 1', category: 'Esportes', url: 'caze-tv-1', logo: 'https://yt3.googleusercontent.com/ytc/AIdro_n_Y_Y_Y_Y_Y_Y_Y_Y_Y_Y_Y_Y_Y_Y_Y_Y_Y=s900-c-k-c0x00ffffff-no-rj', isPremium: false },
-      { name: 'Caze TV 2', category: 'Esportes', url: 'caze-tv-2', logo: 'https://yt3.googleusercontent.com/ytc/AIdro_n_Y_Y_Y_Y_Y_Y_Y_Y_Y_Y_Y_Y_Y_Y_Y_Y_Y=s900-c-k-c0x00ffffff-no-rj', isPremium: false },
-      { name: 'XSports', category: 'Esportes', url: 'xsports', logo: 'https://logodownload.org/wp-content/uploads/2014/05/sportv-logo.png', isPremium: true },
+        // Esportes
+        { name: 'Prime Video', category: 'Esportes', url: 'https://embedtv.best/tv/primevideo', logo: 'https://logodownload.org/wp-content/uploads/2014/10/amazon-prime-video-logo.png', isPremium: true },
+        { name: 'Prime Video 2', category: 'Esportes', url: 'https://embedtv.best/tv/primevideo2', logo: 'https://logodownload.org/wp-content/uploads/2014/10/amazon-prime-video-logo.png', isPremium: true },
+        { name: 'Premiere', category: 'Esportes', url: 'https://embedtv.best/tv/premiere', logo: 'https://logodownload.org/wp-content/uploads/2014/10/premiere-logo.png', isPremium: true },
+        { name: 'Premiere 2', category: 'Esportes', url: 'https://embedtv.best/tv/premiere2', logo: 'https://logodownload.org/wp-content/uploads/2014/10/premiere-logo.png', isPremium: true },
+        { name: 'Premiere 3', category: 'Esportes', url: 'https://embedtv.best/tv/premiere3', logo: 'https://logodownload.org/wp-content/uploads/2014/10/premiere-logo.png', isPremium: true },
+        { name: 'Premiere 4', category: 'Esportes', url: 'https://embedtv.best/tv/premiere4', logo: 'https://logodownload.org/wp-content/uploads/2014/10/premiere-logo.png', isPremium: true },
+        { name: 'Premiere 5', category: 'Esportes', url: 'https://embedtv.best/tv/premiere5', logo: 'https://logodownload.org/wp-content/uploads/2014/10/premiere-logo.png', isPremium: true },
+        { name: 'Premiere 6', category: 'Esportes', url: 'https://embedtv.best/tv/premiere6', logo: 'https://logodownload.org/wp-content/uploads/2014/10/premiere-logo.png', isPremium: true },
+        { name: 'Premiere 7', category: 'Esportes', url: 'https://embedtv.best/tv/premiere7', logo: 'https://logodownload.org/wp-content/uploads/2014/10/premiere-logo.png', isPremium: true },
+        { name: 'Premiere 8', category: 'Esportes', url: 'https://embedtv.best/tv/premiere8', logo: 'https://logodownload.org/wp-content/uploads/2014/10/premiere-logo.png', isPremium: true },
+        { name: 'ESPN', category: 'Esportes', url: 'https://embedtv.best/tv/espn', logo: 'https://logodownload.org/wp-content/uploads/2019/10/espn-logo-1.png', isPremium: true },
+        { name: 'ESPN 2', category: 'Esportes', url: 'https://embedtv.best/tv/espn2', logo: 'https://logodownload.org/wp-content/uploads/2019/10/espn-logo-1.png', isPremium: true },
+        { name: 'ESPN 3', category: 'Esportes', url: 'https://embedtv.best/tv/espn3', logo: 'https://logodownload.org/wp-content/uploads/2019/10/espn-logo-1.png', isPremium: true },
+        { name: 'ESPN 4', category: 'Esportes', url: 'https://embedtv.best/tv/espn4', logo: 'https://logodownload.org/wp-content/uploads/2019/10/espn-logo-1.png', isPremium: true },
+        { name: 'ESPN 5', category: 'Esportes', url: 'https://embedtv.best/tv/espn5', logo: 'https://logodownload.org/wp-content/uploads/2019/10/espn-logo-1.png', isPremium: true },
+        { name: 'ESPN 6', category: 'Esportes', url: 'https://embedtv.best/tv/espn6', logo: 'https://logodownload.org/wp-content/uploads/2019/10/espn-logo-1.png', isPremium: true },
+        { name: 'GE TV', category: 'Esportes', url: 'https://embedtv.best/tv/getv', logo: 'https://logodownload.org/wp-content/uploads/2014/05/globo-logo.png', isPremium: true },
+        { name: 'SporTV', category: 'Esportes', url: 'https://embedtv.best/tv/sportv', logo: 'https://logodownload.org/wp-content/uploads/2016/10/sportv-logo-1.png', isPremium: true },
+        { name: 'SporTV 2', category: 'Esportes', url: 'https://embedtv.best/tv/sportv2', logo: 'https://logodownload.org/wp-content/uploads/2016/10/sportv-logo-1.png', isPremium: true },
+        { name: 'SporTV 3', category: 'Esportes', url: 'https://embedtv.best/tv/sportv3', logo: 'https://logodownload.org/wp-content/uploads/2016/10/sportv-logo-1.png', isPremium: true },
+        { name: 'SporTV 4', category: 'Esportes', url: 'https://embedtv.best/tv/sportv4', logo: 'https://logodownload.org/wp-content/uploads/2016/10/sportv-logo-1.png', isPremium: true },
+        { name: 'SporTV 3 (PT)', category: 'Esportes', url: 'https://embedtv.best/tv/pt_sportv3', logo: 'https://logodownload.org/wp-content/uploads/2016/10/sportv-logo-1.png', isPremium: true },
+        { name: 'SporTV 1 (PT)', category: 'Esportes', url: 'https://embedtv.best/tv/pt_sportv1', logo: 'https://logodownload.org/wp-content/uploads/2016/10/sportv-logo-1.png', isPremium: true },
+        { name: 'SporTV 2 (PT)', category: 'Esportes', url: 'https://embedtv.best/tv/pt_sportv2', logo: 'https://logodownload.org/wp-content/uploads/2016/10/sportv-logo-1.png', isPremium: true },
+        { name: 'SporTV 4 (PT)', category: 'Esportes', url: 'https://embedtv.best/tv/pt_sportv4', logo: 'https://logodownload.org/wp-content/uploads/2016/10/sportv-logo-1.png', isPremium: true },
+        { name: 'SporTV 5 (PT)', category: 'Esportes', url: 'https://embedtv.best/tv/pt_sportv5', logo: 'https://logodownload.org/wp-content/uploads/2016/10/sportv-logo-1.png', isPremium: true },
+        { name: 'SporTV 6 (PT)', category: 'Esportes', url: 'https://embedtv.best/tv/pt_sportv6', logo: 'https://logodownload.org/wp-content/uploads/2016/10/sportv-logo-1.png', isPremium: true },
+        { name: 'SporTV 7 (PT)', category: 'Esportes', url: 'https://embedtv.best/tv/pt_sportv7', logo: 'https://logodownload.org/wp-content/uploads/2016/10/sportv-logo-1.png', isPremium: true },
+        { name: 'BandSports', category: 'Esportes', url: 'https://embedtv.best/tv/bandsports', logo: 'https://logodownload.org/wp-content/uploads/2016/10/bandsports-logo.png', isPremium: true },
+        { name: 'Cazé TV 1', category: 'Esportes', url: 'https://embedtv.best/tv/caze1', logo: 'https://yt3.googleusercontent.com/ytc/AIdro_n_Y_X_X_X_X_X_X_X_X_X_X_X_X_X_X_X_X_X=s900-c-k-c0x00ffffff-no-rj', isPremium: true },
+        { name: 'Cazé TV 2', category: 'Esportes', url: 'https://embedtv.best/tv/caze2', logo: 'https://yt3.googleusercontent.com/ytc/AIdro_n_Y_X_X_X_X_X_X_X_X_X_X_X_X_X_X_X_X_X=s900-c-k-c0x00ffffff-no-rj', isPremium: true },
+        { name: 'Cazé TV 3', category: 'Esportes', url: 'https://embedtv.best/tv/caze3', logo: 'https://yt3.googleusercontent.com/ytc/AIdro_n_Y_X_X_X_X_X_X_X_X_X_X_X_X_X_X_X_X_X=s900-c-k-c0x00ffffff-no-rj', isPremium: true },
+        { name: 'Combate', category: 'Esportes', url: 'https://embedtv.best/tv/combate', logo: 'https://logodownload.org/wp-content/uploads/2016/10/canal-combate-logo.png', isPremium: true },
+        { name: 'UFC Fight Pass', category: 'Esportes', url: 'https://embedtv.best/tv/ufcfightpass', logo: 'https://logodownload.org/wp-content/uploads/2016/10/ufc-logo.png', isPremium: true },
+        { name: 'X Sports', category: 'Esportes', url: 'https://embedtv.best/tv/xsports', logo: 'https://picsum.photos/seed/sports/200/200', isPremium: true },
+        { name: 'A Bola TV', category: 'Esportes', url: 'https://embedtv.best/tv/pt_abola', logo: 'https://picsum.photos/seed/abola/200/200', isPremium: true },
+        { name: 'Benfica TV', category: 'Esportes', url: 'https://embedtv.best/tv/pt_benficatv', logo: 'https://logodownload.org/wp-content/uploads/2016/10/benfica-logo.png', isPremium: true },
+        { name: 'Canal 11', category: 'Esportes', url: 'https://embedtv.best/tv/pt_canal11', logo: 'https://picsum.photos/seed/canal11/200/200', isPremium: true },
+        { name: 'DAZN Eleven 1', category: 'Esportes', url: 'https://embedtv.best/tv/pt_eleven1', logo: 'https://logodownload.org/wp-content/uploads/2019/10/eleven-sports-logo.png', isPremium: true },
+        { name: 'DAZN Eleven 2', category: 'Esportes', url: 'https://embedtv.best/tv/pt_eleven2', logo: 'https://logodownload.org/wp-content/uploads/2019/10/eleven-sports-logo.png', isPremium: true },
+        { name: 'DAZN Eleven 3', category: 'Esportes', url: 'https://embedtv.best/tv/pt_eleven3', logo: 'https://logodownload.org/wp-content/uploads/2019/10/eleven-sports-logo.png', isPremium: true },
+        { name: 'DAZN Eleven 4', category: 'Esportes', url: 'https://embedtv.best/tv/pt_eleven4', logo: 'https://logodownload.org/wp-content/uploads/2019/10/eleven-sports-logo.png', isPremium: true },
+        { name: 'DAZN Eleven 5', category: 'Esportes', url: 'https://embedtv.best/tv/pt_eleven5', logo: 'https://logodownload.org/wp-content/uploads/2019/10/eleven-sports-logo.png', isPremium: true },
+        { name: 'DAZN Eleven 6', category: 'Esportes', url: 'https://embedtv.best/tv/pt_eleven6', logo: 'https://logodownload.org/wp-content/uploads/2019/10/eleven-sports-logo.png', isPremium: true },
+        { name: 'SIC (PT)', category: 'Aberto', url: 'https://embedtv.best/tv/pt_sic', logo: 'https://logodownload.org/wp-content/uploads/2016/10/sic-logo.png', isPremium: false },
+        { name: 'TVI (PT)', category: 'Aberto', url: 'https://embedtv.best/tv/pt_tvi', logo: 'https://logodownload.org/wp-content/uploads/2016/10/tvi-logo.png', isPremium: false },
+        { name: 'RTP 1 (PT)', category: 'Aberto', url: 'https://embedtv.best/tv/pt_rtp1', logo: 'https://logodownload.org/wp-content/uploads/2016/10/rtp-logo.png', isPremium: false },
+        { name: 'RTP 2 (PT)', category: 'Aberto', url: 'https://embedtv.best/tv/pt_rtp2', logo: 'https://logodownload.org/wp-content/uploads/2016/10/rtp-logo.png', isPremium: false },
+        { name: 'SIC Notícias (PT)', category: 'Notícias', url: 'https://embedtv.best/tv/pt_sicnoticias', logo: 'https://logodownload.org/wp-content/uploads/2016/10/sic-logo.png', isPremium: true },
+        { name: 'TVI Ficção (PT)', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/pt_tvi_ficcao', logo: 'https://logodownload.org/wp-content/uploads/2016/10/tvi-logo.png', isPremium: true },
+        { name: 'TVI Reality (PT)', category: 'Reality', url: 'https://embedtv.best/tv/pt_tvi_reality', logo: 'https://logodownload.org/wp-content/uploads/2016/10/tvi-logo.png', isPremium: true },
+        { name: 'CMTV (PT)', category: 'Notícias', url: 'https://embedtv.best/tv/pt_cmtv', logo: 'https://picsum.photos/seed/cmtv/200/200', isPremium: true },
+        { name: 'Globo (PT)', category: 'Aberto', url: 'https://embedtv.best/tv/pt_globo', logo: 'https://logodownload.org/wp-content/uploads/2014/05/globo-logo.png', isPremium: true },
+        { name: 'Sport TV (PT)', category: 'Esportes', url: 'https://embedtv.best/tv/pt_canalsportv', logo: 'https://logodownload.org/wp-content/uploads/2016/10/sportv-logo-1.png', isPremium: true },
+        { name: 'TVI (PT) Canal', category: 'Aberto', url: 'https://embedtv.best/tv/pt_canaltvi', logo: 'https://logodownload.org/wp-content/uploads/2016/10/tvi-logo.png', isPremium: false },
+        { name: 'SIC (PT) Canal', category: 'Aberto', url: 'https://embedtv.best/tv/pt_canalsic', logo: 'https://logodownload.org/wp-content/uploads/2016/10/sic-logo.png', isPremium: false },
 
-      // Notícias
-      { name: 'CNN Brasil', category: 'Notícias', url: 'cnn-brasil', logo: 'https://logodownload.org/wp-content/uploads/2020/03/cnn-brasil-logo.png', isPremium: false },
-      { name: 'Globo News', category: 'Notícias', url: 'globo-news', logo: 'https://logodownload.org/wp-content/uploads/2014/05/globonews-logo.png', isPremium: true },
-      { name: 'Band News', category: 'Notícias', url: 'band-news', logo: 'https://logodownload.org/wp-content/uploads/2014/05/bandnews-logo.png', isPremium: true },
-      { name: 'Record News', category: 'Notícias', url: 'record-news', logo: 'https://logodownload.org/wp-content/uploads/2014/05/record-news-logo.png', isPremium: false },
-      { name: 'SBT News', category: 'Notícias', url: 'sbt-news', logo: 'https://logodownload.org/wp-content/uploads/2014/04/sbt-logo.png', isPremium: false },
+        // Reality
+        { name: 'BBB 1', category: 'Reality', url: 'https://embedtv.best/tv/bbb1', logo: 'https://logodownload.org/wp-content/uploads/2018/01/bbb-logo-big-brother-brasil.png', isPremium: true },
+        { name: 'BBB 2', category: 'Reality', url: 'https://embedtv.best/tv/bbb2', logo: 'https://logodownload.org/wp-content/uploads/2018/01/bbb-logo-big-brother-brasil.png', isPremium: true },
+        { name: 'BBB 3', category: 'Reality', url: 'https://embedtv.best/tv/bbb3', logo: 'https://logodownload.org/wp-content/uploads/2018/01/bbb-logo-big-brother-brasil.png', isPremium: true },
+        { name: 'BBB 4', category: 'Reality', url: 'https://embedtv.best/tv/bbb4', logo: 'https://logodownload.org/wp-content/uploads/2018/01/bbb-logo-big-brother-brasil.png', isPremium: true },
+        { name: 'BBB 5', category: 'Reality', url: 'https://embedtv.best/tv/bbb5', logo: 'https://logodownload.org/wp-content/uploads/2018/01/bbb-logo-big-brother-brasil.png', isPremium: true },
+        { name: 'BBB 6', category: 'Reality', url: 'https://embedtv.best/tv/bbb6', logo: 'https://logodownload.org/wp-content/uploads/2018/01/bbb-logo-big-brother-brasil.png', isPremium: true },
+        { name: 'BBB 7', category: 'Reality', url: 'https://embedtv.best/tv/bbb7', logo: 'https://logodownload.org/wp-content/uploads/2018/01/bbb-logo-big-brother-brasil.png', isPremium: true },
+        { name: 'BBB 8', category: 'Reality', url: 'https://embedtv.best/tv/bbb8', logo: 'https://logodownload.org/wp-content/uploads/2018/01/bbb-logo-big-brother-brasil.png', isPremium: true },
+        { name: 'BBB 9', category: 'Reality', url: 'https://embedtv.best/tv/bbb9', logo: 'https://logodownload.org/wp-content/uploads/2018/01/bbb-logo-big-brother-brasil.png', isPremium: true },
+        { name: 'BBB Mosaico', category: 'Reality', url: 'https://embedtv.best/tv/bbbmosaico', logo: 'https://logodownload.org/wp-content/uploads/2018/01/bbb-logo-big-brother-brasil.png', isPremium: true },
 
-      // Infantil
-      { name: 'Cartoon Network', category: 'Infantil', url: 'cartoon-network', logo: 'https://logodownload.org/wp-content/uploads/2014/05/cartoon-network-logo.png', isPremium: false },
-      { name: 'Disney Channel', category: 'Infantil', url: 'disney-channel', logo: 'https://logodownload.org/wp-content/uploads/2014/04/disney-channel-logo.png', isPremium: false },
-      { name: 'Disney Junior', category: 'Infantil', url: 'disney-junior', logo: 'https://logodownload.org/wp-content/uploads/2014/04/disney-junior-logo.png', isPremium: false },
-      { name: 'Nickelodeon', category: 'Infantil', url: 'nickelodeon', logo: 'https://logodownload.org/wp-content/uploads/2014/05/nickelodeon-logo.png', isPremium: false },
-      { name: 'Nick Jr', category: 'Infantil', url: 'nick-jr', logo: 'https://logodownload.org/wp-content/uploads/2014/05/nick-jr-logo.png', isPremium: false },
-      { name: 'Discovery Kids', category: 'Infantil', url: 'discovery-kids', logo: 'https://logodownload.org/wp-content/uploads/2014/05/discovery-kids-logo.png', isPremium: false },
+        // Filmes e Séries
+        { name: 'Disney+ 1', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/disneyplus1', logo: 'https://logodownload.org/wp-content/uploads/2020/11/disney-plus-logo-1.png', isPremium: true },
+        { name: 'Disney+ 2', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/disneyplus2', logo: 'https://logodownload.org/wp-content/uploads/2020/11/disney-plus-logo-1.png', isPremium: true },
+        { name: 'Disney+ 3', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/disneyplus3', logo: 'https://logodownload.org/wp-content/uploads/2020/11/disney-plus-logo-1.png', isPremium: true },
+        { name: 'Max 1', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/max1', logo: 'https://logodownload.org/wp-content/uploads/2020/11/hbo-max-logo.png', isPremium: true },
+        { name: 'Max 2', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/max2', logo: 'https://logodownload.org/wp-content/uploads/2020/11/hbo-max-logo.png', isPremium: true },
+        { name: 'Max 3', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/max3', logo: 'https://logodownload.org/wp-content/uploads/2020/11/hbo-max-logo.png', isPremium: true },
+        { name: 'HBO', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/hbo', logo: 'https://logodownload.org/wp-content/uploads/2016/10/hbo-logo.png', isPremium: true },
+        { name: 'HBO 2', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/hbo2', logo: 'https://logodownload.org/wp-content/uploads/2016/10/hbo-logo.png', isPremium: true },
+        { name: 'HBO Family', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/hbofamily', logo: 'https://logodownload.org/wp-content/uploads/2016/10/hbo-logo.png', isPremium: true },
+        { name: 'HBO Mundi', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/hbomundi', logo: 'https://logodownload.org/wp-content/uploads/2016/10/hbo-logo.png', isPremium: true },
+        { name: 'HBO Pop', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/hbopop', logo: 'https://logodownload.org/wp-content/uploads/2016/10/hbo-logo.png', isPremium: true },
+        { name: 'HBO Plus', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/hboplus', logo: 'https://logodownload.org/wp-content/uploads/2016/10/hbo-logo.png', isPremium: true },
+        { name: 'HBO Xtreme', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/hboxtreme', logo: 'https://logodownload.org/wp-content/uploads/2016/10/hbo-logo.png', isPremium: true },
+        { name: 'Paramount+', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/paramountplus', logo: 'https://logodownload.org/wp-content/uploads/2021/03/paramount-plus-logo.png', isPremium: true },
+        { name: 'Paramount+ 2', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/paramountplus2', logo: 'https://logodownload.org/wp-content/uploads/2021/03/paramount-plus-logo.png', isPremium: true },
+        { name: 'Telecine Action', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/telecineaction', logo: 'https://logodownload.org/wp-content/uploads/2016/10/telecine-logo.png', isPremium: true },
+        { name: 'Telecine Cult', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/telecinecult', logo: 'https://logodownload.org/wp-content/uploads/2016/10/telecine-logo.png', isPremium: true },
+        { name: 'Telecine Fun', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/telecinefun', logo: 'https://logodownload.org/wp-content/uploads/2016/10/telecine-logo.png', isPremium: true },
+        { name: 'Telecine Pipoca', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/telecinepipoca', logo: 'https://logodownload.org/wp-content/uploads/2016/10/telecine-logo.png', isPremium: true },
+        { name: 'Telecine Premium', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/telecinepremium', logo: 'https://logodownload.org/wp-content/uploads/2016/10/telecine-logo.png', isPremium: true },
+        { name: 'Telecine Touch', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/telecinetouch', logo: 'https://logodownload.org/wp-content/uploads/2016/10/telecine-logo.png', isPremium: true },
+        { name: 'AMC', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/amc', logo: 'https://logodownload.org/wp-content/uploads/2016/10/amc-logo.png', isPremium: true },
+        { name: 'AXN', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/axn', logo: 'https://logodownload.org/wp-content/uploads/2016/10/axn-logo.png', isPremium: true },
+        { name: 'Cinemax', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/cinemax', logo: 'https://logodownload.org/wp-content/uploads/2016/10/cinemax-logo.png', isPremium: true },
+        { name: 'Space', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/space', logo: 'https://logodownload.org/wp-content/uploads/2016/10/space-logo.png', isPremium: true },
+        { name: 'Star Channel', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/starchannel', logo: 'https://logodownload.org/wp-content/uploads/2021/02/star-channel-logo.png', isPremium: true },
+        { name: 'Studio Universal', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/studiouniversal', logo: 'https://logodownload.org/wp-content/uploads/2016/10/studio-universal-logo.png', isPremium: true },
+        { name: 'Warner Channel', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/warnerchannel', logo: 'https://logodownload.org/wp-content/uploads/2016/10/warner-channel-logo.png', isPremium: true },
+        { name: 'Megapix', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/megapix', logo: 'https://logodownload.org/wp-content/uploads/2016/10/megapix-logo.png', isPremium: true },
+        { name: 'TNT', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/tnt', logo: 'https://logodownload.org/wp-content/uploads/2016/10/tnt-logo.png', isPremium: true },
+        { name: 'TNT Novelas', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/tntnovelas', logo: 'https://logodownload.org/wp-content/uploads/2016/10/tnt-logo.png', isPremium: true },
+        { name: 'TNT Series', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/tntseries', logo: 'https://logodownload.org/wp-content/uploads/2016/10/tnt-logo.png', isPremium: true },
+        { name: 'Universal TV', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/universaltv', logo: 'https://logodownload.org/wp-content/uploads/2016/10/universal-tv-logo.png', isPremium: true },
+        { name: 'Chaves 24h', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/24h_chaves', logo: 'https://picsum.photos/seed/chaves/200/200', isPremium: false },
+        { name: 'Dragon Ball 24h', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/24h_dragonball', logo: 'https://picsum.photos/seed/dbz/200/200', isPremium: false },
+        { name: 'Naruto 24h', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/24h_naruto', logo: 'https://picsum.photos/seed/naruto/200/200', isPremium: false },
+        { name: 'Simpsons 24h', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/24h_simpsons', logo: 'https://picsum.photos/seed/simpsons/200/200', isPremium: false },
+        { name: 'Todo Mundo Odeia o Chris 24h', category: 'Filmes e Séries', url: 'https://embedtv.best/tv/24h_odeiachris', logo: 'https://picsum.photos/seed/chris/200/200', isPremium: false },
 
-      // Documentários
-      { name: 'Discovery Channel', category: 'Documentários', url: 'discovery-channel', logo: 'https://logodownload.org/wp-content/uploads/2014/05/discovery-channel-logo.png', isPremium: false },
-      { name: 'Animal Planet', category: 'Documentários', url: 'animal-planet', logo: 'https://logodownload.org/wp-content/uploads/2014/05/animal-planet-logo.png', isPremium: false },
-      { name: 'History Channel', category: 'Documentários', url: 'history-channel', logo: 'https://logodownload.org/wp-content/uploads/2014/05/history-channel-logo.png', isPremium: false },
-      { name: 'National Geographic', category: 'Documentários', url: 'national-geographic', logo: 'https://logodownload.org/wp-content/uploads/2014/05/national-geographic-logo.png', isPremium: false },
-      { name: 'Fish TV', category: 'Documentários', url: 'fish-tv', logo: 'https://logodownload.org/wp-content/uploads/2014/05/discovery-channel-logo.png', isPremium: false },
+        // Infantil
+        { name: 'Cartoon Network', category: 'Infantil', url: 'https://embedtv.best/tv/cartoonnetwork', logo: 'https://logodownload.org/wp-content/uploads/2016/10/cartoon-network-logo.png', isPremium: true },
+        { name: 'Cartoonito', category: 'Infantil', url: 'https://embedtv.best/tv/cartoonito', logo: 'https://logodownload.org/wp-content/uploads/2016/10/cartoon-network-logo.png', isPremium: true },
+        { name: 'Discovery Kids', category: 'Infantil', url: 'https://embedtv.best/tv/discoverykids', logo: 'https://logodownload.org/wp-content/uploads/2016/10/discovery-kids-logo.png', isPremium: true },
+        { name: 'Gloob', category: 'Infantil', url: 'https://embedtv.best/tv/gloob', logo: 'https://logodownload.org/wp-content/uploads/2016/10/gloob-logo.png', isPremium: true },
 
-      // Filmes
-      { name: 'Telecine Action', category: 'Filmes', url: 'telecine-action', logo: 'https://logodownload.org/wp-content/uploads/2014/10/telecine-logo.png', isPremium: true },
-      { name: 'Telecine Premium', category: 'Filmes', url: 'telecine-premium', logo: 'https://logodownload.org/wp-content/uploads/2014/10/telecine-logo.png', isPremium: true },
-      { name: 'Telecine Pipoca', category: 'Filmes', url: 'telecine-pipoca', logo: 'https://logodownload.org/wp-content/uploads/2014/10/telecine-logo.png', isPremium: true },
-      { name: 'Telecine Fun', category: 'Filmes', url: 'telecine-fun', logo: 'https://logodownload.org/wp-content/uploads/2014/10/telecine-logo.png', isPremium: true },
-      { name: 'Telecine Touch', category: 'Filmes', url: 'telecine-touch', logo: 'https://logodownload.org/wp-content/uploads/2014/10/telecine-logo.png', isPremium: true },
-      { name: 'Telecine Cult', category: 'Filmes', url: 'telecine-cult', logo: 'https://logodownload.org/wp-content/uploads/2014/10/telecine-logo.png', isPremium: true },
-      { name: 'HBO', category: 'Filmes', url: 'hbo', logo: 'https://logodownload.org/wp-content/uploads/2014/07/hbo-logo.png', isPremium: true },
-      { name: 'HBO 2', category: 'Filmes', url: 'hbo-2', logo: 'https://logodownload.org/wp-content/uploads/2014/07/hbo-logo.png', isPremium: true },
-      { name: 'HBO Plus', category: 'Filmes', url: 'hbo-plus', logo: 'https://logodownload.org/wp-content/uploads/2014/07/hbo-logo.png', isPremium: true },
-      { name: 'HBO Family', category: 'Filmes', url: 'hbo-family', logo: 'https://logodownload.org/wp-content/uploads/2014/07/hbo-logo.png', isPremium: true },
-      { name: 'Max Prime', category: 'Filmes', url: 'max-prime', logo: 'https://logodownload.org/wp-content/uploads/2014/07/hbo-logo.png', isPremium: true },
-      { name: 'Max Up', category: 'Filmes', url: 'max-up', logo: 'https://logodownload.org/wp-content/uploads/2014/07/hbo-logo.png', isPremium: true },
-      { name: 'Cinemax', category: 'Filmes', url: 'cinemax', logo: 'https://logodownload.org/wp-content/uploads/2014/07/cinemax-logo.png', isPremium: true },
-      { name: 'Megapix', category: 'Filmes', url: 'megapix', logo: 'https://logodownload.org/wp-content/uploads/2014/10/megapix-logo.png', isPremium: true },
-      { name: 'FX', category: 'Filmes', url: 'fx', logo: 'https://logodownload.org/wp-content/uploads/2014/10/fx-logo.png', isPremium: true },
-      { name: 'Fox', category: 'Filmes', url: 'fox', logo: 'https://logodownload.org/wp-content/uploads/2014/10/fox-logo.png', isPremium: true },
-      { name: 'Sony Channel', category: 'Filmes', url: 'sony-channel', logo: 'https://logodownload.org/wp-content/uploads/2014/10/sony-channel-logo.png', isPremium: true },
-      { name: 'Warner Channel', category: 'Filmes', url: 'warner-channel', logo: 'https://logodownload.org/wp-content/uploads/2014/10/warner-channel-logo.png', isPremium: true },
-      { name: 'Universal Channel', category: 'Filmes', url: 'universal-channel', logo: 'https://logodownload.org/wp-content/uploads/2014/10/universal-channel-logo.png', isPremium: true },
-      { name: 'AXN', category: 'Filmes', url: 'axn', logo: 'https://logodownload.org/wp-content/uploads/2014/10/axn-logo.png', isPremium: true },
-      { name: 'TNT', category: 'Filmes', url: 'tnt', logo: 'https://logodownload.org/wp-content/uploads/2014/10/tnt-logo.png', isPremium: true },
-      { name: 'Space', category: 'Filmes', url: 'space', logo: 'https://logodownload.org/wp-content/uploads/2014/10/space-logo.png', isPremium: true },
-      { name: 'Paramount Network', category: 'Filmes', url: 'paramount-network', logo: 'https://logodownload.org/wp-content/uploads/2014/10/paramount-network-logo.png', isPremium: true },
-      { name: 'Prime Video 1', category: 'Filmes', url: 'prime-video-1', logo: 'https://logodownload.org/wp-content/uploads/2014/10/amazon-prime-video-logo.png', isPremium: true },
-      { name: 'Prime Video 2', category: 'Filmes', url: 'prime-video-2', logo: 'https://logodownload.org/wp-content/uploads/2014/10/amazon-prime-video-logo.png', isPremium: true },
-      { name: 'Prime Video 3', category: 'Filmes', url: 'prime-video-3', logo: 'https://logodownload.org/wp-content/uploads/2014/10/amazon-prime-video-logo.png', isPremium: true },
+        // Documentários
+        { name: 'Animal Planet', category: 'Documentários', url: 'https://embedtv.best/tv/animalplanet', logo: 'https://logodownload.org/wp-content/uploads/2016/10/animal-planet-logo.png', isPremium: true },
+        { name: 'Discovery Channel', category: 'Documentários', url: 'https://embedtv.best/tv/discoverychannel', logo: 'https://logodownload.org/wp-content/uploads/2016/10/discovery-channel-logo.png', isPremium: true },
+        { name: 'Discovery H&H', category: 'Documentários', url: 'https://embedtv.best/tv/discoveryhh', logo: 'https://logodownload.org/wp-content/uploads/2016/10/discovery-channel-logo.png', isPremium: true },
+        { name: 'Discovery ID', category: 'Documentários', url: 'https://embedtv.best/tv/discoveryid', logo: 'https://logodownload.org/wp-content/uploads/2016/10/discovery-channel-logo.png', isPremium: true },
+        { name: 'Discovery Science', category: 'Documentários', url: 'https://embedtv.best/tv/discoveryscience', logo: 'https://logodownload.org/wp-content/uploads/2016/10/discovery-channel-logo.png', isPremium: true },
+        { name: 'Discovery Theater', category: 'Documentários', url: 'https://embedtv.best/tv/discoverytheather', logo: 'https://logodownload.org/wp-content/uploads/2016/10/discovery-channel-logo.png', isPremium: true },
+        { name: 'Discovery Turbo', category: 'Documentários', url: 'https://embedtv.best/tv/discoveryturbo', logo: 'https://logodownload.org/wp-content/uploads/2016/10/discovery-channel-logo.png', isPremium: true },
+        { name: 'Discovery Word', category: 'Documentários', url: 'https://embedtv.best/tv/discoveryword', logo: 'https://logodownload.org/wp-content/uploads/2016/10/discovery-channel-logo.png', isPremium: true },
+        { name: 'Fish TV', category: 'Documentários', url: 'https://embedtv.best/tv/fish', logo: 'https://picsum.photos/seed/fish/200/200', isPremium: true },
+        { name: 'History', category: 'Documentários', url: 'https://embedtv.best/tv/history', logo: 'https://logodownload.org/wp-content/uploads/2016/10/history-channel-logo.png', isPremium: true },
+        { name: 'History 2', category: 'Documentários', url: 'https://embedtv.best/tv/history2', logo: 'https://logodownload.org/wp-content/uploads/2016/10/history-channel-logo.png', isPremium: true },
+        { name: 'A&E', category: 'Documentários', url: 'https://embedtv.best/tv/ae', logo: 'https://logodownload.org/wp-content/uploads/2016/10/ae-logo.png', isPremium: true },
+        { name: 'HGTV', category: 'Documentários', url: 'https://embedtv.best/tv/hgtv', logo: 'https://logodownload.org/wp-content/uploads/2016/10/hgtv-logo.png', isPremium: true },
 
-      // Variedades
-      { name: 'MTV', category: 'Variedades', url: 'mtv', logo: 'https://logodownload.org/wp-content/uploads/2014/10/mtv-logo.png', isPremium: false },
-      { name: 'Multishow', category: 'Variedades', url: 'multishow', logo: 'https://logodownload.org/wp-content/uploads/2014/10/multishow-logo.png', isPremium: true },
-      { name: 'Comedy Central', category: 'Variedades', url: 'comedy-central', logo: 'https://logodownload.org/wp-content/uploads/2014/10/comedy-central-logo.png', isPremium: true },
-      { name: 'E! Entertainment', category: 'Variedades', url: 'e-entertainment', logo: 'https://logodownload.org/wp-content/uploads/2014/10/e-entertainment-logo.png', isPremium: true },
-      { name: 'Lifetime', category: 'Variedades', url: 'lifetime', logo: 'https://logodownload.org/wp-content/uploads/2014/10/lifetime-logo.png', isPremium: true },
-      { name: 'TLC', category: 'Variedades', url: 'tlc', logo: 'https://logodownload.org/wp-content/uploads/2014/10/tlc-logo.png', isPremium: true },
-      { name: 'Food Network', category: 'Variedades', url: 'food-network', logo: 'https://logodownload.org/wp-content/uploads/2014/10/food-network-logo.png', isPremium: true },
-      { name: 'HGTV', category: 'Variedades', url: 'hgtv', logo: 'https://logodownload.org/wp-content/uploads/2014/10/hgtv-logo.png', isPremium: true },
-      { name: 'Investigation Discovery', category: 'Variedades', url: 'investigation-discovery', logo: 'https://logodownload.org/wp-content/uploads/2014/10/id-logo.png', isPremium: true },
-      { name: 'Travel Channel', category: 'Variedades', url: 'travel-channel', logo: 'https://logodownload.org/wp-content/uploads/2014/10/travel-channel-logo.png', isPremium: true },
+        // Notícias
+        { name: 'Band News', category: 'Notícias', url: 'https://embedtv.best/tv/bandnews', logo: 'https://logodownload.org/wp-content/uploads/2016/10/bandnews-logo.png', isPremium: false },
+        { name: 'CNN Brasil', category: 'Notícias', url: 'https://embedtv.best/tv/cnnbrasil', logo: 'https://logodownload.org/wp-content/uploads/2020/03/cnn-brasil-logo.png', isPremium: false },
+        { name: 'Globo News', category: 'Notícias', url: 'https://embedtv.best/tv/globonews', logo: 'https://logodownload.org/wp-content/uploads/2016/10/globonews-logo.png', isPremium: true },
 
-      // Reality
-      { name: 'BBB 1', category: 'Reality', url: 'bbb1', logo: 'https://logodownload.org/wp-content/uploads/2014/02/globo-logo.png', isPremium: true },
-      { name: 'BBB 2', category: 'Reality', url: 'bbb2', logo: 'https://logodownload.org/wp-content/uploads/2014/02/globo-logo.png', isPremium: true },
-      { name: 'BBB 3', category: 'Reality', url: 'bbb3', logo: 'https://logodownload.org/wp-content/uploads/2014/02/globo-logo.png', isPremium: true },
-      { name: 'BBB 4', category: 'Reality', url: 'bbb4', logo: 'https://logodownload.org/wp-content/uploads/2014/02/globo-logo.png', isPremium: true },
-      { name: 'BBB 5', category: 'Reality', url: 'bbb5', logo: 'https://logodownload.org/wp-content/uploads/2014/02/globo-logo.png', isPremium: true },
-      { name: 'BBB 6', category: 'Reality', url: 'bbb6', logo: 'https://logodownload.org/wp-content/uploads/2014/02/globo-logo.png', isPremium: true },
-    ];
+        // Aberto
+        { name: 'Band RJ', category: 'Aberto', url: 'https://embedtv.best/tv/bandrj', logo: 'https://logodownload.org/wp-content/uploads/2014/05/band-logo.png', isPremium: false },
+        { name: 'Band SP', category: 'Aberto', url: 'https://embedtv.best/tv/bandsp', logo: 'https://logodownload.org/wp-content/uploads/2014/05/band-logo.png', isPremium: false },
+        { name: 'Record MG', category: 'Aberto', url: 'https://embedtv.best/tv/recordmg', logo: 'https://logodownload.org/wp-content/uploads/2014/05/record-logo.png', isPremium: false },
+        { name: 'Record RJ', category: 'Aberto', url: 'https://embedtv.best/tv/recordrj', logo: 'https://logodownload.org/wp-content/uploads/2014/05/record-logo.png', isPremium: false },
+        { name: 'Record SP', category: 'Aberto', url: 'https://embedtv.best/tv/recordsp', logo: 'https://logodownload.org/wp-content/uploads/2014/05/record-logo.png', isPremium: false },
+        { name: 'SBT RJ', category: 'Aberto', url: 'https://embedtv.best/tv/sbtrj', logo: 'https://logodownload.org/wp-content/uploads/2014/05/sbt-logo.png', isPremium: false },
+        { name: 'SBT SP', category: 'Aberto', url: 'https://embedtv.best/tv/sbtsp', logo: 'https://logodownload.org/wp-content/uploads/2014/05/sbt-logo.png', isPremium: false },
+        { name: 'TV Aparecida', category: 'Aberto', url: 'https://embedtv.best/tv/aparecida', logo: 'https://picsum.photos/seed/aparecida/200/200', isPremium: false },
+        { name: 'Canção Nova', category: 'Aberto', url: 'https://embedtv.best/tv/cancaonova', logo: 'https://picsum.photos/seed/cancaonova/200/200', isPremium: false },
+        { name: 'TV Cultura', category: 'Aberto', url: 'https://embedtv.best/tv/cultura', logo: 'https://logodownload.org/wp-content/uploads/2014/05/tv-cultura-logo.png', isPremium: false },
+        { name: 'Globo AM', category: 'Aberto', url: 'https://embedtv.best/tv/globoam', logo: 'https://logodownload.org/wp-content/uploads/2014/05/globo-logo.png', isPremium: false },
+        { name: 'Globo CE', category: 'Aberto', url: 'https://embedtv.best/tv/globoce', logo: 'https://logodownload.org/wp-content/uploads/2014/05/globo-logo.png', isPremium: false },
+        { name: 'Globo ES', category: 'Aberto', url: 'https://embedtv.best/tv/globoes', logo: 'https://logodownload.org/wp-content/uploads/2014/05/globo-logo.png', isPremium: false },
+        { name: 'Globo MG', category: 'Aberto', url: 'https://embedtv.best/tv/globomg', logo: 'https://logodownload.org/wp-content/uploads/2014/05/globo-logo.png', isPremium: false },
+        { name: 'Globo PB', category: 'Aberto', url: 'https://embedtv.best/tv/globopb', logo: 'https://logodownload.org/wp-content/uploads/2014/05/globo-logo.png', isPremium: false },
+        { name: 'Globo PE', category: 'Aberto', url: 'https://embedtv.best/tv/globope', logo: 'https://logodownload.org/wp-content/uploads/2014/05/globo-logo.png', isPremium: false },
+        { name: 'Globo RJ', category: 'Aberto', url: 'https://embedtv.best/tv/globorj', logo: 'https://logodownload.org/wp-content/uploads/2014/05/globo-logo.png', isPremium: false },
+        { name: 'Globo RS', category: 'Aberto', url: 'https://embedtv.best/tv/globors', logo: 'https://logodownload.org/wp-content/uploads/2014/05/globo-logo.png', isPremium: false },
+        { name: 'Globo SP', category: 'Aberto', url: 'https://embedtv.best/tv/globosp', logo: 'https://logodownload.org/wp-content/uploads/2014/05/globo-logo.png', isPremium: false },
+
+        // Variedades
+        { name: 'MTV', category: 'Variedades', url: 'https://embedtv.best/tv/mtv', logo: 'https://logodownload.org/wp-content/uploads/2016/10/mtv-logo.png', isPremium: true },
+        { name: 'Multishow', category: 'Variedades', url: 'https://embedtv.best/tv/multishow', logo: 'https://logodownload.org/wp-content/uploads/2016/10/multishow-logo.png', isPremium: true },
+        { name: 'Food Network', category: 'Variedades', url: 'https://embedtv.best/tv/foodnetwork', logo: 'https://logodownload.org/wp-content/uploads/2016/10/food-network-logo.png', isPremium: true },
+        { name: 'MasterChef 24h', category: 'Variedades', url: 'https://embedtv.best/tv/masterchef', logo: 'https://picsum.photos/seed/masterchef/200/200', isPremium: false },
+        { name: 'GNT', category: 'Variedades', url: 'https://embedtv.best/tv/gnt', logo: 'https://logodownload.org/wp-content/uploads/2016/10/gnt-logo.png', isPremium: true },
+        { name: 'Comedy Central', category: 'Variedades', url: 'https://embedtv.best/tv/comedycentral', logo: 'https://logodownload.org/wp-content/uploads/2016/10/comedy-central-logo.png', isPremium: true },
+        { name: 'Canal Off', category: 'Variedades', url: 'https://embedtv.best/tv/off', logo: 'https://logodownload.org/wp-content/uploads/2016/10/off-logo.png', isPremium: true },
+        { name: 'TCM', category: 'Variedades', url: 'https://embedtv.best/tv/tcm', logo: 'https://logodownload.org/wp-content/uploads/2016/10/tcm-logo.png', isPremium: true },
+        { name: 'TLC', category: 'Variedades', url: 'https://embedtv.best/tv/tlc', logo: 'https://logodownload.org/wp-content/uploads/2016/10/tlc-logo.png', isPremium: true },
+
+        // Adulto
+        { name: 'Playboy TV', category: 'Adulto', url: 'https://embedtv.best/tv/playboy', logo: 'https://logodownload.org/wp-content/uploads/2016/10/playboy-logo.png', isPremium: true },
+        { name: 'Sexy Hot', category: 'Adulto', url: 'https://embedtv.best/tv/sexyhot', logo: 'https://picsum.photos/seed/sexyhot/200/200', isPremium: true },
+      ];
+
     try {
+      // Clear existing channels first
+      const q = query(collection(db, 'channels'));
+      const snap = await getDocs(q);
+      for (const d of snap.docs) {
+        await deleteDoc(d.ref);
+      }
+
+      // Add new channels
       for (const ch of sampleChannels) {
         await addDoc(collection(db, 'channels'), ch);
       }
@@ -489,8 +564,12 @@ const AdminDashboard = ({ profile }: { profile: UserProfile }) => {
                       <div className="flex justify-end gap-2">
                         <button 
                           onClick={() => toggleUserStatus(user)}
-                          className="p-2 hover:bg-zinc-800 rounded-lg text-zinc-400 hover:text-white transition-all"
-                          title={user.status === 'active' ? 'Suspender' : 'Ativar'}
+                          className={cn(
+                            "p-2 rounded-lg transition-all",
+                            user.status === 'pending' ? "bg-green-500/10 text-green-500 hover:bg-green-500/20" :
+                            "hover:bg-zinc-800 text-zinc-400 hover:text-white"
+                          )}
+                          title={user.status === 'active' ? 'Suspender' : user.status === 'pending' ? 'Liberar Acesso' : 'Ativar'}
                         >
                           {user.status === 'active' ? <XCircle size={18} /> : <CheckCircle2 size={18} />}
                         </button>
@@ -1002,9 +1081,18 @@ export default function App() {
             setProfile(adminProfile);
             setUser(u);
           } else {
-            // Not authorized
+            // New user - create pending profile
+            const newProfile: UserProfile = {
+              uid: u.uid,
+              email: u.email || '',
+              role: 'user',
+              displayName: u.displayName || 'Usuário',
+              status: 'pending',
+              createdAt: new Date().toISOString()
+            };
+            await setDoc(docRef, newProfile);
+            setProfile(newProfile);
             setUser(u);
-            setProfile(null); // This will trigger the Login screen to show "Not Authorized"
           }
         }
       } else {
