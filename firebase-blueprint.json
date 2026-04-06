@@ -1,0 +1,42 @@
+{
+  "entities": {
+    "users": {
+      "title": "User",
+      "description": "User profile and permissions",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "email": { "type": "string", "format": "email" },
+        "role": { "type": "string", "enum": ["admin", "user"] },
+        "displayName": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["active", "expired", "suspended"] },
+        "expirationDate": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "channels": {
+      "title": "Channel",
+      "description": "TV Channel information",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "category": { "type": "string" },
+        "url": { "type": "string", "format": "uri" },
+        "logo": { "type": "string", "format": "uri" },
+        "isPremium": { "type": "boolean" }
+      },
+      "required": ["name", "category", "url"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "users",
+      "description": "User profiles"
+    },
+    "/channels/{channelId}": {
+      "schema": "channels",
+      "description": "TV Channels"
+    }
+  }
+}

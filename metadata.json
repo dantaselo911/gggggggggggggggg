@@ -1,5 +1,9 @@
 {
-  "name": "Nexus TV Live",
-  "description": "A experiência definitiva de streaming de TV ao vivo com canais premium e interface tecnológica.",
-  "requestFramePermissions": []
+  "name": "nexus-iptv-premium",
+  "description": "Sistema de streaming privado com painel administrativo avançado e área de usuário VIP.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
 }
