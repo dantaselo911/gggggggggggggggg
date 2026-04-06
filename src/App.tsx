@@ -14,6 +14,7 @@ import {
   onSnapshot, 
   query, 
   where,
+  getDocs,
   Timestamp,
   addDoc,
   deleteDoc,
@@ -43,6 +44,7 @@ import {
   AlertTriangle,
   Menu,
   X,
+  ShieldAlert,
   ChevronRight,
   Play
 } from 'lucide-react';
@@ -89,7 +91,7 @@ const LoadingScreen = () => (
   </div>
 );
 
-const Login = () => {
+const Login = ({ user, profile }: { user: FirebaseUser | null, profile: UserProfile | null }) => {
   const handleLogin = async () => {
     const provider = new GoogleAuthProvider();
     try {
@@ -98,6 +100,10 @@ const Login = () => {
       console.error("Login error:", error);
     }
   };
+
+  const handleLogout = () => signOut(auth);
+
+  const isUnauthorized = user && !profile;
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-4 relative overflow-hidden">
@@ -118,18 +124,56 @@ const Login = () => {
           <p className="text-zinc-400 mt-2 text-center">Acesse o melhor do entretenimento premium em um só lugar.</p>
         </div>
 
-        <button
-          onClick={handleLogin}
-          className="w-full bg-white text-black font-semibold py-4 rounded-2xl flex items-center justify-center gap-3 hover:bg-zinc-200 transition-all active:scale-95"
-        >
-          <img src="https://www.google.com/favicon.ico" alt="Google" className="w-5 h-5" />
-          Entrar com Google
-        </button>
+        {isUnauthorized ? (
+          <div className="space-y-6 text-center">
+            <div className="bg-red-500/10 border border-red-500/20 p-6 rounded-2xl">
+              <ShieldAlert className="text-red-500 mx-auto mb-3" size={32} />
+              <h2 className="text-lg font-bold text-white mb-2">Acesso Não Autorizado</h2>
+              <p className="text-zinc-400 text-sm leading-relaxed">
+                Seu e-mail (<span className="text-white font-medium">{user.email}</span>) não possui um acesso ativo no sistema.
+              </p>
+            </div>
+            
+            <div className="space-y-3">
+              <a 
+                href="https://wa.me/5511999999999" 
+                target="_blank" 
+                rel="noreferrer"
+                className="w-full bg-blue-600 text-white font-semibold py-4 rounded-2xl flex items-center justify-center gap-3 hover:bg-blue-700 transition-all active:scale-95 shadow-lg shadow-blue-600/20"
+              >
+                <Headset size={20} />
+                Adquirir Acesso no PV
+              </a>
+              
+              <button
+                onClick={handleLogout}
+                className="w-full bg-zinc-800 text-zinc-300 font-semibold py-4 rounded-2xl flex items-center justify-center gap-3 hover:bg-zinc-700 transition-all active:scale-95"
+              >
+                <LogOut size={20} />
+                Sair da Conta
+              </button>
+            </div>
+          </div>
+        ) : (
+          <button
+            onClick={handleLogin}
+            className="w-full bg-white text-black font-semibold py-4 rounded-2xl flex items-center justify-center gap-3 hover:bg-zinc-200 transition-all active:scale-95"
+          >
+            <img src="https://www.google.com/favicon.ico" alt="Google" className="w-5 h-5" />
+            Entrar com Google
+          </button>
+        )}
 
         <div className="mt-8 pt-8 border-t border-zinc-800 text-center">
           <p className="text-zinc-500 text-sm">
-            Não tem uma conta? <br />
-            <span className="text-blue-400 font-medium cursor-pointer hover:underline">Entre em contato com o suporte no PV</span>
+            {isUnauthorized ? (
+              "Se você já adquiriu, aguarde a ativação pelo administrador."
+            ) : (
+              <>
+                Não tem uma conta? <br />
+                <span className="text-blue-400 font-medium cursor-pointer hover:underline">Entre em contato com o suporte no PV</span>
+              </>
+            )}
           </p>
         </div>
       </motion.div>
@@ -212,15 +256,110 @@ const AdminDashboard = ({ profile }: { profile: UserProfile }) => {
 
   const seedChannels = async () => {
     const sampleChannels = [
-      { name: 'Globo HD', category: 'Aberto', url: 'https://example.com/globo', logo: 'https://logodownload.org/wp-content/uploads/2014/02/globo-logo.png', isPremium: false },
-      { name: 'SBT', category: 'Aberto', url: 'https://example.com/sbt', logo: 'https://logodownload.org/wp-content/uploads/2014/04/sbt-logo.png', isPremium: false },
-      { name: 'Record TV', category: 'Aberto', url: 'https://example.com/record', logo: 'https://logodownload.org/wp-content/uploads/2014/05/record-tv-logo.png', isPremium: false },
-      { name: 'HBO Plus', category: 'Filmes', url: 'https://example.com/hbo', logo: 'https://logodownload.org/wp-content/uploads/2014/07/hbo-logo.png', isPremium: true },
-      { name: 'Telecine Action', category: 'Filmes', url: 'https://example.com/telecine', logo: 'https://logodownload.org/wp-content/uploads/2014/10/telecine-logo.png', isPremium: true },
-      { name: 'ESPN Brasil', category: 'Esportes', url: 'https://example.com/espn', logo: 'https://logodownload.org/wp-content/uploads/2014/05/espn-logo.png', isPremium: true },
-      { name: 'SporTV', category: 'Esportes', url: 'https://example.com/sportv', logo: 'https://logodownload.org/wp-content/uploads/2014/05/sportv-logo.png', isPremium: true },
-      { name: 'Discovery Channel', category: 'Documentários', url: 'https://example.com/discovery', logo: 'https://logodownload.org/wp-content/uploads/2014/05/discovery-channel-logo.png', isPremium: false },
-      { name: 'Disney Channel', category: 'Infantil', url: 'https://example.com/disney', logo: 'https://logodownload.org/wp-content/uploads/2014/04/disney-channel-logo.png', isPremium: false },
+      // Aberto
+      { name: 'Globo SP', category: 'Aberto', url: 'globo-sp', logo: 'https://logodownload.org/wp-content/uploads/2014/02/globo-logo.png', isPremium: false },
+      { name: 'Globo RJ', category: 'Aberto', url: 'globo-rj', logo: 'https://logodownload.org/wp-content/uploads/2014/02/globo-logo.png', isPremium: false },
+      { name: 'Globo MG', category: 'Aberto', url: 'globo-mg', logo: 'https://logodownload.org/wp-content/uploads/2014/02/globo-logo.png', isPremium: false },
+      { name: 'SBT', category: 'Aberto', url: 'sbt', logo: 'https://logodownload.org/wp-content/uploads/2014/04/sbt-logo.png', isPremium: false },
+      { name: 'Record TV', category: 'Aberto', url: 'record-tv', logo: 'https://logodownload.org/wp-content/uploads/2014/05/record-tv-logo.png', isPremium: false },
+      { name: 'Band', category: 'Aberto', url: 'band', logo: 'https://logodownload.org/wp-content/uploads/2014/05/band-logo.png', isPremium: false },
+      { name: 'Rede TV', category: 'Aberto', url: 'rede-tv', logo: 'https://logodownload.org/wp-content/uploads/2014/05/redetv-logo.png', isPremium: false },
+      { name: 'Cultura', category: 'Aberto', url: 'cultura', logo: 'https://logodownload.org/wp-content/uploads/2014/05/tv-cultura-logo.png', isPremium: false },
+      
+      // Esportes
+      { name: 'SporTV', category: 'Esportes', url: 'sportv', logo: 'https://logodownload.org/wp-content/uploads/2014/05/sportv-logo.png', isPremium: true },
+      { name: 'SporTV 2', category: 'Esportes', url: 'sportv-2', logo: 'https://logodownload.org/wp-content/uploads/2014/05/sportv-logo.png', isPremium: true },
+      { name: 'SporTV 3', category: 'Esportes', url: 'sportv-3', logo: 'https://logodownload.org/wp-content/uploads/2014/05/sportv-logo.png', isPremium: true },
+      { name: 'ESPN', category: 'Esportes', url: 'espn', logo: 'https://logodownload.org/wp-content/uploads/2014/05/espn-logo.png', isPremium: true },
+      { name: 'ESPN 2', category: 'Esportes', url: 'espn-2', logo: 'https://logodownload.org/wp-content/uploads/2014/05/espn-logo.png', isPremium: true },
+      { name: 'ESPN 3', category: 'Esportes', url: 'espn-3', logo: 'https://logodownload.org/wp-content/uploads/2014/05/espn-logo.png', isPremium: true },
+      { name: 'ESPN 4', category: 'Esportes', url: 'espn-4', logo: 'https://logodownload.org/wp-content/uploads/2014/05/espn-logo.png', isPremium: true },
+      { name: 'Fox Sports', category: 'Esportes', url: 'fox-sports', logo: 'https://logodownload.org/wp-content/uploads/2014/10/fox-sports-logo.png', isPremium: true },
+      { name: 'Fox Sports 2', category: 'Esportes', url: 'fox-sports-2', logo: 'https://logodownload.org/wp-content/uploads/2014/10/fox-sports-logo.png', isPremium: true },
+      { name: 'Premiere', category: 'Esportes', url: 'premiere', logo: 'https://logodownload.org/wp-content/uploads/2014/10/premiere-logo.png', isPremium: true },
+      { name: 'Premiere 2', category: 'Esportes', url: 'premiere-2', logo: 'https://logodownload.org/wp-content/uploads/2014/10/premiere-logo.png', isPremium: true },
+      { name: 'Premiere 3', category: 'Esportes', url: 'premiere-3', logo: 'https://logodownload.org/wp-content/uploads/2014/10/premiere-logo.png', isPremium: true },
+      { name: 'Premiere 4', category: 'Esportes', url: 'premiere-4', logo: 'https://logodownload.org/wp-content/uploads/2014/10/premiere-logo.png', isPremium: true },
+      { name: 'Premiere 5', category: 'Esportes', url: 'premiere-5', logo: 'https://logodownload.org/wp-content/uploads/2014/10/premiere-logo.png', isPremium: true },
+      { name: 'Premiere 6', category: 'Esportes', url: 'premiere-6', logo: 'https://logodownload.org/wp-content/uploads/2014/10/premiere-logo.png', isPremium: true },
+      { name: 'Premiere 7', category: 'Esportes', url: 'premiere-7', logo: 'https://logodownload.org/wp-content/uploads/2014/10/premiere-logo.png', isPremium: true },
+      { name: 'Band Sports', category: 'Esportes', url: 'band-sports', logo: 'https://logodownload.org/wp-content/uploads/2014/05/bandsports-logo.png', isPremium: true },
+      { name: 'Combate', category: 'Esportes', url: 'combate', logo: 'https://logodownload.org/wp-content/uploads/2014/10/combate-logo.png', isPremium: true },
+      { name: 'EI Plus', category: 'Esportes', url: 'ei-plus', logo: 'https://logodownload.org/wp-content/uploads/2014/10/esporte-interativo-logo.png', isPremium: true },
+      { name: 'UFC Fight Pass', category: 'Esportes', url: 'ufc-fight-pass', logo: 'https://logodownload.org/wp-content/uploads/2014/10/ufc-logo.png', isPremium: true },
+      { name: 'Caze TV 1', category: 'Esportes', url: 'caze-tv-1', logo: 'https://yt3.googleusercontent.com/ytc/AIdro_n_Y_Y_Y_Y_Y_Y_Y_Y_Y_Y_Y_Y_Y_Y_Y_Y_Y=s900-c-k-c0x00ffffff-no-rj', isPremium: false },
+      { name: 'Caze TV 2', category: 'Esportes', url: 'caze-tv-2', logo: 'https://yt3.googleusercontent.com/ytc/AIdro_n_Y_Y_Y_Y_Y_Y_Y_Y_Y_Y_Y_Y_Y_Y_Y_Y_Y=s900-c-k-c0x00ffffff-no-rj', isPremium: false },
+      { name: 'XSports', category: 'Esportes', url: 'xsports', logo: 'https://logodownload.org/wp-content/uploads/2014/05/sportv-logo.png', isPremium: true },
+
+      // Notícias
+      { name: 'CNN Brasil', category: 'Notícias', url: 'cnn-brasil', logo: 'https://logodownload.org/wp-content/uploads/2020/03/cnn-brasil-logo.png', isPremium: false },
+      { name: 'Globo News', category: 'Notícias', url: 'globo-news', logo: 'https://logodownload.org/wp-content/uploads/2014/05/globonews-logo.png', isPremium: true },
+      { name: 'Band News', category: 'Notícias', url: 'band-news', logo: 'https://logodownload.org/wp-content/uploads/2014/05/bandnews-logo.png', isPremium: true },
+      { name: 'Record News', category: 'Notícias', url: 'record-news', logo: 'https://logodownload.org/wp-content/uploads/2014/05/record-news-logo.png', isPremium: false },
+      { name: 'SBT News', category: 'Notícias', url: 'sbt-news', logo: 'https://logodownload.org/wp-content/uploads/2014/04/sbt-logo.png', isPremium: false },
+
+      // Infantil
+      { name: 'Cartoon Network', category: 'Infantil', url: 'cartoon-network', logo: 'https://logodownload.org/wp-content/uploads/2014/05/cartoon-network-logo.png', isPremium: false },
+      { name: 'Disney Channel', category: 'Infantil', url: 'disney-channel', logo: 'https://logodownload.org/wp-content/uploads/2014/04/disney-channel-logo.png', isPremium: false },
+      { name: 'Disney Junior', category: 'Infantil', url: 'disney-junior', logo: 'https://logodownload.org/wp-content/uploads/2014/04/disney-junior-logo.png', isPremium: false },
+      { name: 'Nickelodeon', category: 'Infantil', url: 'nickelodeon', logo: 'https://logodownload.org/wp-content/uploads/2014/05/nickelodeon-logo.png', isPremium: false },
+      { name: 'Nick Jr', category: 'Infantil', url: 'nick-jr', logo: 'https://logodownload.org/wp-content/uploads/2014/05/nick-jr-logo.png', isPremium: false },
+      { name: 'Discovery Kids', category: 'Infantil', url: 'discovery-kids', logo: 'https://logodownload.org/wp-content/uploads/2014/05/discovery-kids-logo.png', isPremium: false },
+
+      // Documentários
+      { name: 'Discovery Channel', category: 'Documentários', url: 'discovery-channel', logo: 'https://logodownload.org/wp-content/uploads/2014/05/discovery-channel-logo.png', isPremium: false },
+      { name: 'Animal Planet', category: 'Documentários', url: 'animal-planet', logo: 'https://logodownload.org/wp-content/uploads/2014/05/animal-planet-logo.png', isPremium: false },
+      { name: 'History Channel', category: 'Documentários', url: 'history-channel', logo: 'https://logodownload.org/wp-content/uploads/2014/05/history-channel-logo.png', isPremium: false },
+      { name: 'National Geographic', category: 'Documentários', url: 'national-geographic', logo: 'https://logodownload.org/wp-content/uploads/2014/05/national-geographic-logo.png', isPremium: false },
+      { name: 'Fish TV', category: 'Documentários', url: 'fish-tv', logo: 'https://logodownload.org/wp-content/uploads/2014/05/discovery-channel-logo.png', isPremium: false },
+
+      // Filmes
+      { name: 'Telecine Action', category: 'Filmes', url: 'telecine-action', logo: 'https://logodownload.org/wp-content/uploads/2014/10/telecine-logo.png', isPremium: true },
+      { name: 'Telecine Premium', category: 'Filmes', url: 'telecine-premium', logo: 'https://logodownload.org/wp-content/uploads/2014/10/telecine-logo.png', isPremium: true },
+      { name: 'Telecine Pipoca', category: 'Filmes', url: 'telecine-pipoca', logo: 'https://logodownload.org/wp-content/uploads/2014/10/telecine-logo.png', isPremium: true },
+      { name: 'Telecine Fun', category: 'Filmes', url: 'telecine-fun', logo: 'https://logodownload.org/wp-content/uploads/2014/10/telecine-logo.png', isPremium: true },
+      { name: 'Telecine Touch', category: 'Filmes', url: 'telecine-touch', logo: 'https://logodownload.org/wp-content/uploads/2014/10/telecine-logo.png', isPremium: true },
+      { name: 'Telecine Cult', category: 'Filmes', url: 'telecine-cult', logo: 'https://logodownload.org/wp-content/uploads/2014/10/telecine-logo.png', isPremium: true },
+      { name: 'HBO', category: 'Filmes', url: 'hbo', logo: 'https://logodownload.org/wp-content/uploads/2014/07/hbo-logo.png', isPremium: true },
+      { name: 'HBO 2', category: 'Filmes', url: 'hbo-2', logo: 'https://logodownload.org/wp-content/uploads/2014/07/hbo-logo.png', isPremium: true },
+      { name: 'HBO Plus', category: 'Filmes', url: 'hbo-plus', logo: 'https://logodownload.org/wp-content/uploads/2014/07/hbo-logo.png', isPremium: true },
+      { name: 'HBO Family', category: 'Filmes', url: 'hbo-family', logo: 'https://logodownload.org/wp-content/uploads/2014/07/hbo-logo.png', isPremium: true },
+      { name: 'Max Prime', category: 'Filmes', url: 'max-prime', logo: 'https://logodownload.org/wp-content/uploads/2014/07/hbo-logo.png', isPremium: true },
+      { name: 'Max Up', category: 'Filmes', url: 'max-up', logo: 'https://logodownload.org/wp-content/uploads/2014/07/hbo-logo.png', isPremium: true },
+      { name: 'Cinemax', category: 'Filmes', url: 'cinemax', logo: 'https://logodownload.org/wp-content/uploads/2014/07/cinemax-logo.png', isPremium: true },
+      { name: 'Megapix', category: 'Filmes', url: 'megapix', logo: 'https://logodownload.org/wp-content/uploads/2014/10/megapix-logo.png', isPremium: true },
+      { name: 'FX', category: 'Filmes', url: 'fx', logo: 'https://logodownload.org/wp-content/uploads/2014/10/fx-logo.png', isPremium: true },
+      { name: 'Fox', category: 'Filmes', url: 'fox', logo: 'https://logodownload.org/wp-content/uploads/2014/10/fox-logo.png', isPremium: true },
+      { name: 'Sony Channel', category: 'Filmes', url: 'sony-channel', logo: 'https://logodownload.org/wp-content/uploads/2014/10/sony-channel-logo.png', isPremium: true },
+      { name: 'Warner Channel', category: 'Filmes', url: 'warner-channel', logo: 'https://logodownload.org/wp-content/uploads/2014/10/warner-channel-logo.png', isPremium: true },
+      { name: 'Universal Channel', category: 'Filmes', url: 'universal-channel', logo: 'https://logodownload.org/wp-content/uploads/2014/10/universal-channel-logo.png', isPremium: true },
+      { name: 'AXN', category: 'Filmes', url: 'axn', logo: 'https://logodownload.org/wp-content/uploads/2014/10/axn-logo.png', isPremium: true },
+      { name: 'TNT', category: 'Filmes', url: 'tnt', logo: 'https://logodownload.org/wp-content/uploads/2014/10/tnt-logo.png', isPremium: true },
+      { name: 'Space', category: 'Filmes', url: 'space', logo: 'https://logodownload.org/wp-content/uploads/2014/10/space-logo.png', isPremium: true },
+      { name: 'Paramount Network', category: 'Filmes', url: 'paramount-network', logo: 'https://logodownload.org/wp-content/uploads/2014/10/paramount-network-logo.png', isPremium: true },
+      { name: 'Prime Video 1', category: 'Filmes', url: 'prime-video-1', logo: 'https://logodownload.org/wp-content/uploads/2014/10/amazon-prime-video-logo.png', isPremium: true },
+      { name: 'Prime Video 2', category: 'Filmes', url: 'prime-video-2', logo: 'https://logodownload.org/wp-content/uploads/2014/10/amazon-prime-video-logo.png', isPremium: true },
+      { name: 'Prime Video 3', category: 'Filmes', url: 'prime-video-3', logo: 'https://logodownload.org/wp-content/uploads/2014/10/amazon-prime-video-logo.png', isPremium: true },
+
+      // Variedades
+      { name: 'MTV', category: 'Variedades', url: 'mtv', logo: 'https://logodownload.org/wp-content/uploads/2014/10/mtv-logo.png', isPremium: false },
+      { name: 'Multishow', category: 'Variedades', url: 'multishow', logo: 'https://logodownload.org/wp-content/uploads/2014/10/multishow-logo.png', isPremium: true },
+      { name: 'Comedy Central', category: 'Variedades', url: 'comedy-central', logo: 'https://logodownload.org/wp-content/uploads/2014/10/comedy-central-logo.png', isPremium: true },
+      { name: 'E! Entertainment', category: 'Variedades', url: 'e-entertainment', logo: 'https://logodownload.org/wp-content/uploads/2014/10/e-entertainment-logo.png', isPremium: true },
+      { name: 'Lifetime', category: 'Variedades', url: 'lifetime', logo: 'https://logodownload.org/wp-content/uploads/2014/10/lifetime-logo.png', isPremium: true },
+      { name: 'TLC', category: 'Variedades', url: 'tlc', logo: 'https://logodownload.org/wp-content/uploads/2014/10/tlc-logo.png', isPremium: true },
+      { name: 'Food Network', category: 'Variedades', url: 'food-network', logo: 'https://logodownload.org/wp-content/uploads/2014/10/food-network-logo.png', isPremium: true },
+      { name: 'HGTV', category: 'Variedades', url: 'hgtv', logo: 'https://logodownload.org/wp-content/uploads/2014/10/hgtv-logo.png', isPremium: true },
+      { name: 'Investigation Discovery', category: 'Variedades', url: 'investigation-discovery', logo: 'https://logodownload.org/wp-content/uploads/2014/10/id-logo.png', isPremium: true },
+      { name: 'Travel Channel', category: 'Variedades', url: 'travel-channel', logo: 'https://logodownload.org/wp-content/uploads/2014/10/travel-channel-logo.png', isPremium: true },
+
+      // Reality
+      { name: 'BBB 1', category: 'Reality', url: 'bbb1', logo: 'https://logodownload.org/wp-content/uploads/2014/02/globo-logo.png', isPremium: true },
+      { name: 'BBB 2', category: 'Reality', url: 'bbb2', logo: 'https://logodownload.org/wp-content/uploads/2014/02/globo-logo.png', isPremium: true },
+      { name: 'BBB 3', category: 'Reality', url: 'bbb3', logo: 'https://logodownload.org/wp-content/uploads/2014/02/globo-logo.png', isPremium: true },
+      { name: 'BBB 4', category: 'Reality', url: 'bbb4', logo: 'https://logodownload.org/wp-content/uploads/2014/02/globo-logo.png', isPremium: true },
+      { name: 'BBB 5', category: 'Reality', url: 'bbb5', logo: 'https://logodownload.org/wp-content/uploads/2014/02/globo-logo.png', isPremium: true },
+      { name: 'BBB 6', category: 'Reality', url: 'bbb6', logo: 'https://logodownload.org/wp-content/uploads/2014/02/globo-logo.png', isPremium: true },
     ];
     try {
       for (const ch of sampleChannels) {
@@ -335,15 +474,19 @@ const AdminDashboard = ({ profile }: { profile: UserProfile }) => {
                     <td className="p-4">
                       <span className={cn(
                         "px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider",
-                        user.status === 'active' ? "bg-green-500/10 text-green-500" : "bg-red-500/10 text-red-500"
+                        user.status === 'active' ? "bg-green-500/10 text-green-500" : 
+                        user.status === 'suspended' ? "bg-red-500/10 text-red-500" :
+                        "bg-yellow-500/10 text-yellow-500"
                       )}>
-                        {user.status}
+                        {user.status === 'active' ? 'Ativo' : 
+                         user.status === 'suspended' ? 'Suspenso' : 'Pendente'}
                       </span>
                     </td>
                     <td className="p-4 text-zinc-400 text-sm">
                       {user.expirationDate ? new Date(user.expirationDate).toLocaleDateString() : 'N/A'}
                     </td>
-                    <div className="flex justify-end gap-2">
+                    <td className="p-4 text-right">
+                      <div className="flex justify-end gap-2">
                         <button 
                           onClick={() => toggleUserStatus(user)}
                           className="p-2 hover:bg-zinc-800 rounded-lg text-zinc-400 hover:text-white transition-all"
@@ -369,6 +512,7 @@ const AdminDashboard = ({ profile }: { profile: UserProfile }) => {
                           <Trash2 size={18} />
                         </button>
                       </div>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -779,36 +923,28 @@ const UserDashboard = ({ profile }: { profile: UserProfile }) => {
                 </div>
               </div>
 
-              {/* In a real app, use a video player like ReactPlayer or Hls.js */}
-              <div className="w-full h-full flex flex-col items-center justify-center bg-zinc-950">
-                <motion.div 
-                  animate={{ scale: [1, 1.1, 1], opacity: [0.5, 1, 0.5] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                  className="mb-6"
-                >
-                  <MonitorPlay size={80} className="text-blue-500" />
-                </motion.div>
-                <p className="text-zinc-400 font-medium">Conectando ao servidor de stream...</p>
-                <p className="text-zinc-600 text-xs mt-2">{playingChannel.url}</p>
-                
-                <div className="mt-12 flex gap-4">
-                  <button className="bg-blue-600 px-6 py-2 rounded-xl font-bold text-sm">RECARREGAR</button>
-                  <button className="bg-zinc-800 px-6 py-2 rounded-xl font-bold text-sm">ALTERAR SERVIDOR</button>
-                </div>
+              {/* Video Player */}
+              <div className="w-full h-full bg-black relative">
+                <iframe 
+                  src={playingChannel.url.startsWith('http') 
+                    ? playingChannel.url 
+                    : `https://embedflix.click/tv/player.php?canal=${playingChannel.url}`}
+                  className="w-full h-full border-0"
+                  allowFullScreen
+                  referrerPolicy="no-referrer"
+                />
               </div>
 
-              <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black to-transparent">
+              <div className="absolute bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-black to-transparent pointer-events-none">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-6">
-                    <button className="text-white hover:text-blue-400"><Play size={24} fill="currentColor" /></button>
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
                       <span className="text-white font-bold text-sm">AO VIVO</span>
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
-                    <span className="text-zinc-400 text-sm">Qualidade: <span className="text-white font-bold">1080p HD</span></span>
-                    <button className="text-white hover:text-blue-400"><Settings size={20} /></button>
+                    <span className="text-zinc-400 text-sm">Qualidade: <span className="text-white font-bold">AUTO HD</span></span>
                   </div>
                 </div>
               </div>
@@ -829,28 +965,50 @@ export default function App() {
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (u) => {
-      setUser(u);
       if (u) {
+        // First check by UID
         const docRef = doc(db, 'users', u.uid);
         const docSnap = await getDoc(docRef);
         
         if (docSnap.exists()) {
           setProfile(docSnap.data() as UserProfile);
+          setUser(u);
         } else {
-          // New user - check if email is pre-authorized
-          // For demo, we'll auto-create a pending profile
-          const newProfile: UserProfile = {
-            uid: u.uid,
-            email: u.email || '',
-            role: u.email === 'dantaselo911@gmail.com' ? 'admin' : 'user',
-            displayName: u.displayName || 'Usuário',
-            status: u.email === 'dantaselo911@gmail.com' ? 'active' : 'pending',
-            createdAt: new Date().toISOString()
-          };
-          await setDoc(docRef, newProfile);
-          setProfile(newProfile);
+          // Check if email was pre-authorized by admin
+          const q = query(collection(db, 'users'), where('email', '==', u.email));
+          const querySnap = await getDocs(q);
+          
+          if (!querySnap.empty) {
+            // Found pre-authorized email, update with UID
+            const preAuthDoc = querySnap.docs[0];
+            const profileData = preAuthDoc.data() as UserProfile;
+            
+            // If the document ID is not the UID, we should migrate it or just use it
+            // For simplicity, we'll update the existing document with the UID
+            await updateDoc(preAuthDoc.ref, { uid: u.uid });
+            setProfile({ ...profileData, uid: u.uid });
+            setUser(u);
+          } else if (u.email === 'dantaselo911@gmail.com') {
+            // Auto-create admin if it's the owner
+            const adminProfile: UserProfile = {
+              uid: u.uid,
+              email: u.email,
+              role: 'admin',
+              displayName: u.displayName || 'Admin',
+              status: 'active',
+              createdAt: new Date().toISOString()
+            };
+            await setDoc(docRef, adminProfile);
+            setProfile(adminProfile);
+            setUser(u);
+          } else {
+            // Not authorized
+            setUser(u);
+            setProfile(null); // This will trigger the Login screen to show "Not Authorized"
+          }
         }
       } else {
+        setUser(null);
         setProfile(null);
       }
       setLoading(false);
@@ -859,7 +1017,7 @@ export default function App() {
   }, []);
 
   if (loading) return <LoadingScreen />;
-  if (!user || !profile) return <Login />;
+  if (!user || !profile) return <Login user={user} profile={profile} />;
 
   const menuItems = [
     { id: 'dashboard', label: 'Início', icon: LayoutDashboard },
